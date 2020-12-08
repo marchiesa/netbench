@@ -16,6 +16,7 @@ public class GraphDetails {
     private HashMap<Integer, Set<Integer>> torToServerIds;
     private HashMap<Integer, Integer> serverToTorId;
     private boolean autoExtended;
+    private HashMap<Integer, HashMap<Integer, HashMap<String, String>>> src_2_dst_2_attribute_2_value;
 
     GraphDetails(String idHash) {
         this.idHash = idHash;
@@ -25,6 +26,7 @@ public class GraphDetails {
         this.switchNodeIds = null;
         this.torNodeIds = null;
         this.autoExtended = false;
+	this.src_2_dst_2_attribute_2_value = new HashMap<Integer, HashMap<Integer, HashMap<String, String>>>();
     }
 
     /**
@@ -212,4 +214,34 @@ public class GraphDetails {
         return serverNodeIds.size();
     }
 
+    /**
+     * Get a value from the attribute (for links)
+     *
+     * @return The value associated to an attribute
+     */
+    public String getValueForAttribute(Integer src, Integer dst, String attribute){
+	if (this.src_2_dst_2_attribute_2_value.get(src) == null)
+            return null;
+	else if (this.src_2_dst_2_attribute_2_value.get(src).get(dst) ==  null)
+	    return null;
+	else if (this.src_2_dst_2_attribute_2_value.get(src).get(dst).get(attribute) == null)
+	    return null;
+	else
+	    return this.src_2_dst_2_attribute_2_value.get(src).get(dst).get(attribute);
+    }
+
+    /**
+     * Set the value associated to an attribut(for links)
+     *
+     * @return void
+     */
+    public void setValueForAttribute(Integer src, Integer dst, String attribute, String value){
+	if (this.src_2_dst_2_attribute_2_value.get(src) == null){
+	    this.src_2_dst_2_attribute_2_value.put(src, new HashMap<Integer, HashMap<String, String>>());
+	}
+	if(this.src_2_dst_2_attribute_2_value.get(src).get(dst) == null){
+            this.src_2_dst_2_attribute_2_value.get(src).put(dst, new HashMap<String, String>());
+	}
+        this.src_2_dst_2_attribute_2_value.get(src).get(dst).put(attribute, value);
+    }
 }

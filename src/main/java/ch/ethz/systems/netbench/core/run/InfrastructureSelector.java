@@ -9,7 +9,9 @@ import ch.ethz.systems.netbench.core.run.infrastructure.OutputPortGenerator;
 import ch.ethz.systems.netbench.core.run.infrastructure.TransportLayerGenerator;
 import ch.ethz.systems.netbench.ext.bare.BareTransportLayerGenerator;
 import ch.ethz.systems.netbench.ext.basic.EcnTailDropOutputPortGenerator;
+import ch.ethz.systems.netbench.ext.basic.EcnTailDropOutputPortPerLinkGenerator;
 import ch.ethz.systems.netbench.ext.basic.PerfectSimpleLinkGenerator;
+import ch.ethz.systems.netbench.ext.basic.PerfectSimpleLinkPerLinkGenerator;
 import ch.ethz.systems.netbench.ext.demo.DemoIntermediaryGenerator;
 import ch.ethz.systems.netbench.ext.demo.DemoTransportLayerGenerator;
 import ch.ethz.systems.netbench.ext.ecmp.EcmpSwitchGenerator;
@@ -136,6 +138,12 @@ class InfrastructureSelector {
 
         switch (Simulator.getConfiguration().getPropertyOrFail("link")) {
 
+    	    case "perfect_simple_per_link":
+                return new PerfectSimpleLinkPerLinkGenerator(
+			Simulator.getConfiguration().getLongPropertyOrFail("link_delay_ns"),
+			Simulator.getConfiguration().getLongPropertyOrFail("link_bandwidth_bit_per_ns")
+		);
+
             case "perfect_simple":
                 return new PerfectSimpleLinkGenerator(
                         Simulator.getConfiguration().getLongPropertyOrFail("link_delay_ns"),
@@ -165,8 +173,13 @@ class InfrastructureSelector {
 
         switch (Simulator.getConfiguration().getPropertyOrFail("output_port")) {
 
-            case "ecn_tail_drop":
+            case "ecn_tail_drop_per_link":
+                return new EcnTailDropOutputPortPerLinkGenerator(
+			Simulator.getConfiguration().getLongPropertyOrFail("output_port_max_queue_size_bytes"),
+			Simulator.getConfiguration().getLongPropertyOrFail("output_port_ecn_threshold_k_bytes")
+	        );
 
+            case "ecn_tail_drop":
                 return new EcnTailDropOutputPortGenerator(
                         Simulator.getConfiguration().getLongPropertyOrFail("output_port_max_queue_size_bytes"),
                         Simulator.getConfiguration().getLongPropertyOrFail("output_port_ecn_threshold_k_bytes")

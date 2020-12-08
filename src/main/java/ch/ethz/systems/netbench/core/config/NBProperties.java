@@ -153,6 +153,17 @@ public class NBProperties extends Properties {
         }
     }
 
+
+    public String getPropertyofLinkOrFail(Integer src, Integer dst, String attribute) {
+        String result = this.graphDetails.getValueForAttribute(src, dst, attribute);
+	if (result == null){
+	    //throw new PropertyMissingException(this, attribute);
+	    return null;
+	} else{
+	    return result;
+	}
+    }
+
     /**
      * Check whether a property is defined.
      *

@@ -75,7 +75,10 @@ public class TopologyServerExtender {
             outputWriter.write("# Original " + details.getNumEdges() + " links:\n");
             for (Vertex v : graph.getVertexList()) {
                 for (Vertex w : graph.getAdjacentVertices(v)) {
-                    outputWriter.write(v.getId() + " " + w.getId() + "\n");
+		    String link_speed = details.getValueForAttribute(v.getId(), w.getId(), "link_bandwidth_bit_per_ns");
+		    String buffer_size = details.getValueForAttribute(v.getId(), w.getId(), "output_port_max_queue_size_bytes");
+		    String ecn_k = details.getValueForAttribute(v.getId(), w.getId(), "output_port_ecn_threshold_k_bytes");
+                    outputWriter.write(v.getId() + " " + w.getId() + " " + link_speed + " " + buffer_size + " " + ecn_k + "\n");
                 }
             }
 

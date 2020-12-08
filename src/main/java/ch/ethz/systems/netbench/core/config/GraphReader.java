@@ -1,6 +1,7 @@
 package ch.ethz.systems.netbench.core.config;
 
 import edu.asu.emit.algorithm.graph.Graph;
+import ch.ethz.systems.netbench.core.log.SimulationLogger;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -181,6 +182,18 @@ public class GraphReader {
                     String[] spl = line.split(" ");
                     int srcId = Integer.valueOf(spl[0]);
                     int dstId = Integer.valueOf(spl[1]);
+		    String ecn_th = null;
+		    String link_speed = null;
+		    String buffer_size = null;
+		    System.out.println("Adding line " + spl[0] + " " + spl[1]);
+		    if(spl.length > 2){
+                        link_speed = spl[2];
+                        buffer_size = spl[3];
+                        ecn_th = spl[4];
+			details.setValueForAttribute(srcId,dstId,"link_bandwidth_bit_per_ns", link_speed);
+			details.setValueForAttribute(srcId,dstId,"output_port_max_queue_size_bytes", buffer_size);
+			details.setValueForAttribute(srcId,dstId,"output_port_ecn_threshold_k_bytes", ecn_th);
+		    }
                     linkDirectedPairs.add(new ImmutablePair<>(srcId, dstId));
 
                     // Save the coupling of ToR to its servers
