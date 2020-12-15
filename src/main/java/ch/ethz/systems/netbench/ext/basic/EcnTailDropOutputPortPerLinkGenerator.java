@@ -24,7 +24,8 @@ public class EcnTailDropOutputPortPerLinkGenerator extends OutputPortGenerator {
 	String maxQueueSizeBytes_defined_str = Simulator.getConfiguration().getPropertyofLinkOrFail(ownNetworkDevice.getIdentifier(), towardsNetworkDevice.getIdentifier(), "output_port_max_queue_size_bytes");
 	String ecnThresholdKBytes_defined_str = Simulator.getConfiguration().getPropertyofLinkOrFail(ownNetworkDevice.getIdentifier(), towardsNetworkDevice.getIdentifier(), "output_port_ecn_threshold_k_bytes");
         if (maxQueueSizeBytes_defined_str != null){
-	    return new EcnTailDropOutputPort(ownNetworkDevice, towardsNetworkDevice, link, Long.valueOf(maxQueueSizeBytes), Long.valueOf(ecnThresholdKBytes));
+	    System.out.println("Setting the queuesize to" + maxQueueSizeBytes_defined_str + " and the eck K to " + ecnThresholdKBytes_defined_str);
+	    return new EcnTailDropOutputPort(ownNetworkDevice, towardsNetworkDevice, link, Long.valueOf(maxQueueSizeBytes_defined_str), Long.valueOf(ecnThresholdKBytes_defined_str));
         }else{
 	    return new EcnTailDropOutputPort(ownNetworkDevice, towardsNetworkDevice, link, maxQueueSizeBytes, ecnThresholdKBytes);
 	}
